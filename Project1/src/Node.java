@@ -79,6 +79,26 @@ public class Node {
 		return this.parent == null;
 	};
 	
+	public boolean isLeftChild() {
+		if (this.isRoot()) return false;
+		return this.parent.leftChild == this;
+	};
+	
+	public boolean isLeftMidChild() {
+		if (this.isRoot()) return false;
+		return this.parent.leftMidChild == this;
+	};
+	
+	public boolean isRightMidChild() {
+		if (this.isRoot()) return false;
+		return this.parent.rightMidChild == this;
+	};
+	
+	public boolean isRightChild() {
+		if (this.isRoot()) return false;
+		return this.parent.rightChild == this;
+	};
+	
 	public boolean isEmpty() {
 		return this.items.isEmpty();
 	};

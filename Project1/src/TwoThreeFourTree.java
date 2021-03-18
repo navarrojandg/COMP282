@@ -354,39 +354,15 @@ public class TwoThreeFourTree {
 	};
 	
 	public static Node delete(Node root, int item) {
+		// reference 
+		// https://azrael.digipen.edu/~mmead/www/Courses/CS280/Trees-2-3-4-delete.html
+		
 		// deletion is only safe if element is in a leaf with 
 		// more than 2 items
 		
-		Node curr = root;
+		Node curr = root; 
 		
-		// need to find the item deletion node
-		while (!curr.hasItem(item) && curr != null) {
-			switch (curr.size()) {
-				case 1: {
-					// if not in this then return null
-					
-					break;
-				}
-				case 2: {
-					
-					break;
-				}
-				case 3: {
-					
-					break;
-				}
-				default: {
-					curr = null;
-					break;
-				}
-			};
-		};
-		
-		if (curr == null) return null;
-		
-		
-		// then apply one of the 3 cases
-		
+		 
 		
 		return curr;
 	};
