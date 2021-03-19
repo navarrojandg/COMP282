@@ -357,14 +357,49 @@ public class TwoThreeFourTree {
 		// reference 
 		// https://azrael.digipen.edu/~mmead/www/Courses/CS280/Trees-2-3-4-delete.html
 		
-		// deletion is only safe if element is in a leaf with 
-		// more than 2 items
+		Node curr = root;
 		
-		Node curr = root; 
+		// we need to search for the node that contains the item
 		
-		 
+		while (!curr.hasItem(item)) {
+			// curr does not have the item
+			
+			switch (curr.size()) {
+				case 1: {
+					
+					
+					break;
+				}
+				
+				case 2: {
+					break;
+				}
+				
+				case 3: {
+					break;
+				}
+				
+				default: {
+					break;
+				}
+			}
+		};
 		
 		return curr;
+	};
+	
+	public static Node mergeSingleTwo(Node root) {
+		Node temp = new Node();
+		temp.insertItem(root.smallItem());
+		temp.insertItem(root.leftChild.smallItem());
+		temp.insertItem(root.rightChild.smallItem());
+		
+		temp.addLeftChild(root.leftChild.leftChild);
+		temp.addLeftMidChild(root.leftChild.rightChild);
+		temp.addRightMidChild(root.rightChild.leftChild);
+		temp.addRightChild(root.rightChild.rightChild);
+		
+		return temp;
 	};
 	
 	public Integer retreive(int item) {
