@@ -4,7 +4,6 @@ public class Node {
 
 	public Node leftChild;
 	public Node rightChild;
-//	public Node parent;
 	
 	public Node(int key) {
 		this.key = key;
@@ -21,8 +20,7 @@ public class Node {
 	public int getHeight() {
 		return Node.getHeight(this);
 	};
-	
-	// max depth of the node or height at this node
+
 	public static int getHeight(Node n) {
 		if (n == null) { return -1; }
 		
@@ -60,15 +58,15 @@ public class Node {
 	
 	public void setLeftChild(Node n) {
 		this.leftChild = n;
-//		if (n != null) {
-//			n.parent = this;
-//		}
 	};
 	
 	public void setRightChild(Node n) {
 		this.rightChild = n;
-//		if (n != null) {
-//			n.parent = this;
-//		}
 	};
+	
+	public void updateKey(int key) {
+		this.key = key;
+	};
+	
+	
 }
