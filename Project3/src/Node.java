@@ -16,5 +16,12 @@ public class Node {
 	public Node(int key) {
 		this.key = key;
 	};
+	
+	public Node(RedBlackTree T, int key) {
+		this.key = key;
+		this.left = T.nil;
+		this.right = T.nil;
+		this.parent = T.nil;
+	};
 
 }

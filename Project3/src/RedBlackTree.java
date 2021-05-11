@@ -5,9 +5,32 @@ public class RedBlackTree {
 	
 	public RedBlackTree() {
 		this.nil = new Node();
+		this.root = this.nil;
 	};
 	
-	public static void LeftRotate(RedBlackTree T, Node x) {
+	public static void InOrderTreeWalk(RedBlackTree T, Node x) {
+		if (x != T.nil) {
+			RedBlackTree.InOrderTreeWalk(T, x.left);
+			System.out.printf("[%d][%s] ", x.key, x.color == COLOR.BLACK ? "B" : "R");
+			RedBlackTree.InOrderTreeWalk(T, x.right);
+		}
+		
+	};
+	
+	public static Node Search(RedBlackTree T, Node x, int key) {
+		if (x == T.nil || key == x.key) {
+			return x;
+		}
+		
+		if (key < x.key) {
+			return RedBlackTree.Search(T, x.left, key);
+		} else {
+			return RedBlackTree.Search(T, x.right, key);
+		}
+		
+	};
+	
+	public static RedBlackTree LeftRotate(RedBlackTree T, Node x) {
 		Node y = x.right; // set y
 		x.right = y.left; // turn y's left subtree into x's right subtree
 		if (y.left != T.nil) { y.left.parent = x; }
@@ -22,9 +45,10 @@ public class RedBlackTree {
 		y.left = x; // put x on y's left
 		x.parent = y;
 		
+		return T;
 	};
 	
-	public static void RightRotate(RedBlackTree T, Node y) {
+	public static RedBlackTree RightRotate(RedBlackTree T, Node y) {
 		Node x = y.left; // set x
 		y.left = x.right; // turn x's right subtree into y's left subtree
 		if (x.right != T.nil) { x.right.parent = y; }
@@ -39,9 +63,10 @@ public class RedBlackTree {
 		x.right = y; // put y on x's left
 		y.parent = x;
 		
+		return T;
 	};
 	
-	public static void Insert(RedBlackTree T, Node z) {
+	public static RedBlackTree Insert(RedBlackTree T, Node z) {
 		Node y = T.nil;
 		Node x = T.root;
 		
@@ -64,10 +89,10 @@ public class RedBlackTree {
 		z.left = T.nil;
 		z.right = T.nil;
 		z.color = COLOR.RED;
-		RedBlackTree.InsertFixup(T, z);
+		return RedBlackTree.InsertFixup(T, z);
 	}
 	
-	public static void InsertFixup(RedBlackTree T, Node z) {
+	public static RedBlackTree InsertFixup(RedBlackTree T, Node z) {
 		Node y;
 		
 		while (z.parent.color == COLOR.RED) {
@@ -112,9 +137,11 @@ public class RedBlackTree {
 			};
 		}
 		T.root.color = COLOR.BLACK;
+		
+		return T;
 	};
 	
-	public static void Transplant(RedBlackTree T, Node u, Node v) {
+	public static RedBlackTree Transplant(RedBlackTree T, Node u, Node v) {
 		if (u.parent == T.nil) {
 			T.root = v;
 		} else if(u == u.parent.left) {
@@ -123,18 +150,20 @@ public class RedBlackTree {
 			u.parent.right = v;
 		}
 		v.parent = u.parent;
+		
+		return T;
 	};
 	
-	public static void Delete(RedBlackTree T, Node z) {
+	public static RedBlackTree Delete(RedBlackTree T, Node z) {
 		Node x;
 		Node y = z;
 		COLOR initYColor = y.color;
 		if (z.left == T.nil) {
 			x = z.right;
-			RedBlackTree.Transplant(T, z, z.right);
+			T = RedBlackTree.Transplant(T, z, z.right);
 		} else if(z.right == T.nil) {
 			x = z.left;
-			RedBlackTree.Transplant(T, z, z.left);
+			T = RedBlackTree.Transplant(T, z, z.left);
 		} else {
 			y = RedBlackTree.Minimum(T, z.right);
 			initYColor = y.color;
@@ -142,19 +171,21 @@ public class RedBlackTree {
 			if (y.parent == z) {
 				x.parent = y;
 			} else {
-				RedBlackTree.Transplant(T, y, y.right);
+				T = RedBlackTree.Transplant(T, y, y.right);
 				y.right = z.right;
 				y.right.parent = y;
 			}
-			RedBlackTree.Transplant(T, z, y);
+			T = RedBlackTree.Transplant(T, z, y);
 			y.left = z.left;
 			y.left.parent = y;
 			y.color = z.color;
 		}
 		
 		if (initYColor == COLOR.BLACK) {
-			RedBlackTree.DeleteFixup(T, x);
+			T = RedBlackTree.DeleteFixup(T, x);
 		}
+		
+		return T;
 	};
 	
 	public static Node Minimum(RedBlackTree T, Node x) {
@@ -162,7 +193,7 @@ public class RedBlackTree {
 		return x;
 	}
 	
-	public static void DeleteFixup(RedBlackTree T, Node x) {
+	public static RedBlackTree DeleteFixup(RedBlackTree T, Node x) {
 		Node w;
 		
 		while (x != T.root && x.color == COLOR.BLACK) {
@@ -171,7 +202,7 @@ public class RedBlackTree {
 				if (w.color == COLOR.RED) {
 					w.color = COLOR.BLACK;
 					x.parent.color = COLOR.RED;
-					RedBlackTree.LeftRotate(T, x.parent);
+					T = RedBlackTree.LeftRotate(T, x.parent);
 					w = x.parent.right;
 				}
 				if (w.left.color == COLOR.BLACK && w.right.color == COLOR.BLACK) {
@@ -181,13 +212,13 @@ public class RedBlackTree {
 					if (w.right.color == COLOR.BLACK) {
 						w.left.color = COLOR.BLACK;
 						w.color = COLOR.RED;
-						RedBlackTree.RightRotate(T, w);
+						T = RedBlackTree.RightRotate(T, w);
 						w = x.parent.right;
 					}
 					w.color = x.parent.color;
 					x.parent.color = COLOR.BLACK;
 					w.right.color = COLOR.BLACK;
-					RedBlackTree.LeftRotate(T, x.parent);
+					T = RedBlackTree.LeftRotate(T, x.parent);
 					x = T.root;
 				};
 			} else {
@@ -196,7 +227,7 @@ public class RedBlackTree {
 				if (w.color == COLOR.RED) {
 					w.color = COLOR.BLACK;
 					x.parent.color = COLOR.RED;
-					RedBlackTree.RightRotate(T, x.parent);
+					T = RedBlackTree.RightRotate(T, x.parent);
 					w = x.parent.left;
 				}
 				if (w.right.color == COLOR.BLACK && w.left.color == COLOR.BLACK) {
@@ -206,17 +237,19 @@ public class RedBlackTree {
 					if (w.left.color == COLOR.BLACK) {
 						w.right.color = COLOR.BLACK;
 						w.color = COLOR.RED;
-						RedBlackTree.LeftRotate(T, w);
+						T = RedBlackTree.LeftRotate(T, w);
 						w = x.parent.left;
 					}
 					w.color = x.parent.color;
 					x.parent.color = COLOR.BLACK;
 					w.left.color = COLOR.BLACK;
-					RedBlackTree.RightRotate(T, x.parent);
+					T = RedBlackTree.RightRotate(T, x.parent);
 					x = T.root;
 				};
 			}
 		}
 		x.color = COLOR.BLACK;
+		
+		return T;
 	};
 }
